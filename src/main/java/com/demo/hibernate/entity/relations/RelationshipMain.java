@@ -1,5 +1,6 @@
 package com.demo.hibernate.entity.relations;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -27,14 +28,21 @@ public class RelationshipMain {
 		// ==============SESSION 1=========================================
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
-		std = (Student) session.get(Student.class, 25);
+		Query q= session.createQuery("from Student where rollno=25");
+		q.setCacheable(true);
+		std=(Student) q.uniqueResult();
+		System.out.println(std.toString());
+		//std = (Student) session.get(Student.class, 25);
 		tx.commit();
 		session.close();
 		// ==================SESSIION 2=====================================
 		
 		Session session1 = sessionFactory.openSession();
 		 session1.beginTransaction();
-		std = (Student) session1.get(Student.class, 25);
+		 Query q1= session1.createQuery("from Student where rollno=25");
+		 q1.setCacheable(true);
+			std=(Student) q1.uniqueResult();
+			System.out.println(std.toString());
 		session1.getTransaction().commit();
 		session1.close();
 		
